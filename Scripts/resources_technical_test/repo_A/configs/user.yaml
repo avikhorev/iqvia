@@ -1,0 +1,9 @@
+################
+###   USER  ####
+################
+
+laboratory_name: "CUSTOMER_NAME"
+sfdc: "123456789"
+
+tranches:  [60,30,10] #Si la question est quantitave Max 5 categories : Very low, low, medium, high, very high
+
