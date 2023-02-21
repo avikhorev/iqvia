@@ -1,6 +1,15 @@
 import time
 from django.core.mail import send_mail, BadHeaderError
 
+import os
+from python_on_whales import docker
+
+def run_script():
+    output = docker.run(
+        "iqvia:repoA" , ["/results/aaa.xlsx", "nvidia-smi"],
+        volumes=[(os.path.abspath("./OUTPUTS"), "/results")] 
+    )
+
 
 def long_task(to, subject, message):
     print(f"from={...}, {to=}, {subject=}, {message=}")

@@ -1,0 +1,23 @@
+
+{% block page_content %}
+<table style="width: 100%">
+   
+    <tr><td><b> id </b></td><td> <b> script </b></td><td> <b> param1 </b></td><td> <b> param2 </b></td><td> <b> result </b></td></tr>
+    
+    {% for run in runs %}
+        <tr>
+            <td>{{ run.id }}</td>
+            <td>{{ run.script }}</td>
+            <td>{{ run.param1 }}</td>
+            <td>{{ run.param2 }}</td>
+            <td>
+                {% if run.result_file is None %} 
+                    Not available
+                {% else %}
+                    <a href='/download_result/{{run.id}}' download>result</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+{% endblock %}

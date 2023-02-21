@@ -1,7 +1,7 @@
-# numpy
+numpy
 openpyxl
 pandas
-PyYAML
+# PyYAML
 scikit-learn
 scipy
-xlrd
+# xlrd

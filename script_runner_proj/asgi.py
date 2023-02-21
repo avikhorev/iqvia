@@ -1,5 +1,5 @@
 """
-ASGI config for djangoq_project project.
+ASGI config for script_runner_proj project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "djangoq_project.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "script_runner_proj.settings")
 
 application = get_asgi_application()

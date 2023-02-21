@@ -1,10 +1,11 @@
+import sys
 import time
 import os
 import random
 from datetime import datetime
 import numpy as np
 import pandas as pd
-import yaml
+# import yaml
 import logging
 
 
@@ -30,20 +31,28 @@ def run(**kwargs):
 if __name__ == "__main__":
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger('Logger')
-    yaml_file = "configs/default.yaml"
+    # yaml_file = "configs/default.yaml"
 
-    with open(yaml_file, "r") as f:
-        default_config = yaml.load(f, Loader=yaml.FullLoader)
+    # with open(yaml_file, "r") as f:
+    #     default_config = yaml.load(f, Loader=yaml.FullLoader)
         
-    yaml_file_user = "configs/user.yaml"
-    with open(yaml_file_user, "r") as f:
-        user_config = yaml.load(f, Loader=yaml.FullLoader)
+    # yaml_file_user = "configs/user.yaml"
+    # with open(yaml_file_user, "r") as f:
+    #     user_config = yaml.load(f, Loader=yaml.FullLoader)
 
-    df_results, diag_info = run(default_config=default_config, user_config=user_config)
+    if len(sys.argv) < 3:
+        print("2 params expected : OUTPUT_FILE_PATH and PARAM1")
+        sys.exit(1)
+        
+    OUTPUT_FILE_PATH = sys.argv[1]
+    PARAM1 = sys.argv[2]
+    logger.info(f"Script Repo_A running. Params: param1={PARAM1}")
+
+    # df_results, diag_info = run(default_config=default_config, user_config=user_config)
+    df_results, diag_info = run(dummy_arg='random str 123', par=PARAM1)
 
 
     # export results
-    with pd.ExcelWriter(os.path.join(default_config["OUTPUT_FOLDER"],
-                                     "%s_%s.xlsx" % (user_config["laboratory_name"],
-                                                     datetime.today().strftime("%Y-%m-%d-%Hh%M")))) as writer:
-      df_results.to_excel(writer, index=False)
+    with pd.ExcelWriter( OUTPUT_FILE_PATH ) as writer:
+       df_results.to_excel(writer, index=False)
+       sys.exit(0)
