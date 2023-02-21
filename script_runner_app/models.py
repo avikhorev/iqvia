@@ -8,16 +8,6 @@ from django_q.tasks import async_task
 from python_on_whales import docker
 from python_on_whales.exceptions import DockerException
 
-# class ParamType(models.Model):
-# id = models.AutoField(primary_key=True)
-#     param_name = models.CharField(max_length=100)
-#     allowed_values = models.TextField(null=True)
-
-# class ParamValue(models.Model):
-# id = models.AutoField(primary_key=True)
-#     param_type = models.ForeignKey(ParamType, on_delete=models.CASCADE)
-#     param_value = models.CharField(max_length=100)
-
 class ScriptInfo(models.Model):
     class Meta:
         verbose_name = "Script"
@@ -44,31 +34,25 @@ class Run(models.Model):
         else:
             return FileResponse(open(filename, 'rb'))
 
-    # subject = models.CharField(max_length=64)
-    # message = models.TextField()
-    # created_on = models.DateTimeField(auto_now=True)
-    # params = models.ManyToManyField(ParamValue)
-
-
-def launch_run_async(run):
-    out_folder =  os.path.abspath(run.script.output_folder)
-    out_file = time.strftime(run.script.script_name + "_%Y%m%d-%H%M%S.xlsx")
-    result_file_path =  os.path.join( out_folder, out_file  )
-    # try:    
-    docker.run(
-        run.script.docker_image , [f"/results/{out_file}", run.param1, run.param2],
-        volumes=[(out_folder, "/results")],
-    )
-    run.result_file = result_file_path
-    print(f"DONE !!!")
-    # send e-mail to user here
-    # except DockerException as e:
-    #     run.result_file = 'ERROR'
-    #     # send e-mail to tech support team
-    #     print(f"Exit code {e.return_code} while running {e.docker_command}")
-    run.save()
-
 @receiver(post_save, sender=Run)
 def launch_run(sender, instance, created, **kwargs):
     if not created: return
     async_task(launch_run_async, instance)
+    
+def launch_run_async(run):
+    out_folder =  os.path.abspath(run.script.output_folder)
+    out_file = time.strftime(run.script.script_name + "_%Y%m%d-%H%M%S.xlsx")
+    result_file_path =  os.path.join( out_folder, out_file  )
+    try:    
+        docker.run(
+            run.script.docker_image , [f"/results/{out_file}", run.param1, run.param2],
+            volumes=[(out_folder, "/results")],
+        )
+        run.result_file = result_file_path
+        print(f"DONE !!!")
+        # send e-mail to user here
+    except DockerException as e:
+        run.result_file = 'ERROR'
+        # send e-mail to tech support team
+        print(f"Exit code {e.return_code} while running {e.docker_command}")
+    run.save()

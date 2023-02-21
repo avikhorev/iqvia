@@ -85,9 +85,8 @@ DATABASES = {
 Q_CLUSTER = {
     "name": "script_runner_proj",
     'workers': 4,
-    "timeout": 40,
-    'retry': 50,
-    'queue_limit': 50,
+    "timeout": 50,
+    'retry': 60,
     'orm': 'default',
     # "redis": {"host": "127.0.0.1", "port": 6379, "db": 0,},
 }
