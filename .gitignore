@@ -1,3 +1,6 @@
 .venv
 *.py[cod]
 db.sqlite3
+**/.DS_Store
+**/*.xlsx
+**/000*.py
